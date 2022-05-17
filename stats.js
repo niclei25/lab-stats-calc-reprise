@@ -35,16 +35,23 @@ function getAboveBelowMean(nums) {
 }
 // PART A : Basic Stats
 function getMedian(nums) {
-    //Step 1
-    return NaN; // remove me!
+    if (nums.length % 2 === 0) {
+        return (nums[nums.length / 2 - 1] + nums[nums.length / 2]) / 2;
+    }
+    else {
+        return nums[(nums.length - 1) / 2];
+    }
 }
 function getMinMax(nums) {
-    //Step 2
-    return [NaN, NaN]; // remove me!
+    return [nums[0], nums[nums.length - 1]];
 }
 function getStdDev(nums) {
-    //Step 3
-    return NaN; // remove me!
+    let numsMean = getMean(nums);
+    let sqDists = [];
+    for (let num of nums) {
+        sqDists.push((num - numsMean) ** 2);
+    }
+    return Math.sqrt(getMean(sqDists));
 }
 let basicStatsAnalyzeButton = document.querySelector("button#analyze");
 basicStatsAnalyzeButton.addEventListener("click", function () {
@@ -59,12 +66,51 @@ basicStatsAnalyzeButton.addEventListener("click", function () {
 });
 // PART B: Advanced Integer Stats
 function getLeastCommonMultiple(nums) {
-    return NaN; // remove me!
+    let max = nums[nums.length - 1];
+    let result = true;
+    for (let lcm = max; result = true; lcm += max) {
+        for (let num of nums) {
+            if (lcm % num !== 0) {
+                result = false;
+                break;
+            }
+        }
+        if (result === true) {
+            return lcm;
+        }
+        else {
+            result = true;
+        }
+    }
+    return NaN;
 }
 function getAllCommonFactors(nums) {
-    return [NaN]; // remove me!
+    let min = nums[0];
+    let result = true;
+    let gcf = min;
+    let acf = [1];
+    for (let gcf = min; result = true; gcf += min) {
+        for (let num of nums) {
+            if (num % gcf !== 0) {
+                result = false;
+                break;
+            }
+        }
+        if (result === true) {
+            break;
+        }
+        else {
+            result = true;
+        }
+    }
+    for (let i = 2; i <= gcf; i++) {
+        if (gcf % i == 0) {
+            acf.push(i);
+        }
+    }
+    return acf;
 }
-let advancedStatsAnalyzeButton = document.querySelector("button#analyze");
+let advancedStatsAnalyzeButton = document.querySelector("button#analyze-advanced");
 advancedStatsAnalyzeButton.addEventListener("click", function () {
     let numbers = readAllNumbers();
     //Note: Sorting numbers requires passing a custom comparison function to .sort()

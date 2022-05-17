@@ -16,7 +16,7 @@ function readAllNumbers() : number[] {
     return numbers;
 }
 
-function getMean( nums  : number[]) : number {
+function getMean(nums  : number[]) : number {
     let sum = 0;
     for (const n of nums){
         sum += n;
@@ -40,22 +40,28 @@ function getAboveBelowMean(nums : number[]) : [number, number] {
 // PART A : Basic Stats
 
 function getMedian(nums : number[]) : number {
-    //Step 1
-    return NaN; // remove me!
+    if (nums.length % 2 === 0) {
+        return (nums[nums.length/2 - 1] + nums[nums.length/2]) / 2;
+    } else {
+        return nums[(nums.length - 1) / 2];
+    }
 }
 
 function getMinMax(nums : number[]) : [number, number] {
-    //Step 2
-    return [NaN, NaN]; // remove me!
+    return [nums[0], nums[nums.length - 1]];
 }
 
 function getStdDev(nums : number[]) : number {
-    //Step 3
-    return NaN; // remove me!
+    let numsMean : number = getMean(nums);
+    let sqDists : number[] = []
+    for (let num of nums) {
+        sqDists.push((num - numsMean) ** 2)
+    }
+    return Math.sqrt(getMean(sqDists));
 }
 
 let basicStatsAnalyzeButton = document.querySelector("button#analyze") as HTMLButtonElement;
-basicStatsAnalyzeButton.addEventListener("click", function () {
+basicStatsAnalyzeButton.addEventListener("click", function () {    
     let numbers : number[] = readAllNumbers();
     //Note: Sorting numbers requires passing a custom comparison function to .sort()
     numbers.sort(function(a,b){ return a - b });
@@ -70,14 +76,56 @@ basicStatsAnalyzeButton.addEventListener("click", function () {
 // PART B: Advanced Integer Stats
 
 function getLeastCommonMultiple(nums : number[]) : number {
-    return NaN; // remove me!
+    let max : number = nums[nums.length - 1];
+    let result : boolean = true;
+    
+    for (let lcm : number = max; result = true; lcm += max) {
+        for (let num of nums) {
+            if (lcm % num !== 0) {
+                result = false;
+                break;
+            }
+        }
+        if (result === true) {
+            return lcm;
+        } else {
+            result = true;
+        }
+        
+    }
+    return NaN;
 }
 
 function getAllCommonFactors(nums : number[]) : number[] {
-    return [NaN]; // remove me!
+    let min : number = nums[0];
+    let result : boolean = true;
+    let gcf : number = min
+    let acf : number[] = [1]
+    
+    for (let gcf = min; result = true; gcf += min) {
+        for (let num of nums) {
+            if (num % gcf !== 0) {
+                result = false;
+                break;
+            }
+        }
+        if (result) {
+            break;
+        } else {
+            result = true;
+        }
+        
+    }
+    for (let i = 2; i <= gcf; i++) {
+        if (gcf % i == 0) {
+            acf.push(i);            
+        }
+    }
+
+    return acf;
 }
 
-let advancedStatsAnalyzeButton = document.querySelector("button#analyze") as HTMLButtonElement;
+let advancedStatsAnalyzeButton = document.querySelector("button#analyze-advanced") as HTMLButtonElement;
 advancedStatsAnalyzeButton.addEventListener("click", function () {
     let numbers : number[] = readAllNumbers();
     //Note: Sorting numbers requires passing a custom comparison function to .sort()
